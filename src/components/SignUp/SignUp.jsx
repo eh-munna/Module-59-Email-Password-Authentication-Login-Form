@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import app from '../../firebase/firbase.config';
 
 const SignUp = () => {
+  const auth = getAuth(app);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -22,36 +25,51 @@ const SignUp = () => {
     const password = event.target.password.value;
     console.log(`email: `, email);
     console.log(`password: `, password);
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const loggedUser = userCredential.user;
+        console.log(loggedUser);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
     <div>
-      <div className="text-center">
-        <h2 className="text-xl">Welcome!</h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 py-2">
-          <div>
+      <div className="">
+        <h2 className="text-center">Welcome!</h2>
+        <form onSubmit={handleSubmit} className="mx-auto w-50">
+          <div className="mb-3">
+            <label for="exampleInputEmail1" className="form-label">
+              Email address
+            </label>
             <input
-              onChange={handleEmailChange}
-              className=""
+              placeholder="Enter your email"
               type="email"
               name="email"
-              id="email"
-              placeholder="Please enter your email"
+              className="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
             />
           </div>
-          <div>
+          <div className="mb-3">
+            <label for="exampleInputPassword1" className="form-label">
+              Password
+            </label>
             <input
-              onBlur={handlePassword}
-              className=""
-              type="password"
+              placeholder="Enter your password"
               name="password"
-              id="password"
-              placeholder="Your password please"
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
             />
           </div>
-          <div>
-            <input type="submit" className="" value="Register" />
-          </div>
+
+          <button type="submit" className="btn btn-primary">
+            Sign Up
+          </button>
         </form>
       </div>
     </div>

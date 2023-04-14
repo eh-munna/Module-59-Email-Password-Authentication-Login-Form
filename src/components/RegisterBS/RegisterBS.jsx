@@ -35,7 +35,7 @@ const RegisterBS = () => {
         </div>
 
         <button type="submit" className="btn btn-primary">
-          Submit
+          Register
         </button>
       </form>
     </div>
