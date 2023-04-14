@@ -3,38 +3,43 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <div className="py-4">
-      <nav className="flex justify-between items-center">
-        <ul className="flex text-xl font-bold">
-          <li>
-            <Link className="" to="/">
-              Logo
-            </Link>
-          </li>
-        </ul>
-        <ul className="flex gap-4 font-medium text-lg">
-          <li>
-            <Link className="border border-sky-500 px-2 py-1 rounded-md" to="/">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="border border-sky-500 px-2 py-1 rounded-md"
-              to="/login"
-            >
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="border border-sky-500 px-2 py-1 rounded-md"
-              to="/sign-up"
-            >
-              Sign Up
-            </Link>
-          </li>
-        </ul>
+    <div className="">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="">
+            Logo
+          </Link>
+
+          <div className="" id="navbarNav">
+            <ul className=" d-inline-flex list-unstyled gap-4 mb-0">
+              <li className="nav-item">
+                <Link className="nav-link active" aria-current="page" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">
+                  Login
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/sign-up">
+                  Sign Up
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/register">
+                  Register
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/register-bs">
+                  Register BS
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
       </nav>
     </div>
   );
