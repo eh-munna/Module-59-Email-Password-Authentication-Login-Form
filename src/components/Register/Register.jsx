@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
@@ -7,27 +7,46 @@ import app from '../../firebase/firbase.config';
 const auth = getAuth(app);
 
 const Register = () => {
+  // const [email, setEmail] = useState(null);
+  // const [password, setPassword] = useState(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    createUserWithEmailAndPassword(auth, email, password)
+    setSuccess('');
+    setError('');
+    const userForm = event.target;
+    const userEmail = event.target.email.value;
+    const userPassword = event.target.password.value;
+    const passValidation = /^(?=.*[A-Z])$/;
+    if (!passValidation.test(userPassword)) {
+      setError('Password must be one uppercase letter');
+      return;
+    }
+    createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const loggedUser = userCredential.user;
+        userForm.reset();
+        setError('');
+        setSuccess('User has been created successfully');
       })
       .catch((error) => {
         const errorMessage = error.message;
+        setError(errorMessage);
       });
   };
   return (
     <div className="">
       <h2 className="fs-3 text-center">Please login</h2>
+      <h4 className="text-center text-danger fs-4">{error}</h4>
+      <h4 className="text-center text-success fs-4">{success}</h4>
       <form onSubmit={handleSubmit} className="w-50 mx-auto">
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Email address
           </label>
           <input
+            required
             name="email"
             type="email"
             className="form-control"
@@ -40,6 +59,7 @@ const Register = () => {
             Password
           </label>
           <input
+            required
             name="password"
             type="password"
             className="form-control"
