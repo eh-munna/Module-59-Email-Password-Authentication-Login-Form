@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+} from 'firebase/auth';
 import app from '../../firebase/firbase.config';
+import { Link } from 'react-router-dom';
 
 const auth = getAuth(app);
 
@@ -59,17 +64,24 @@ const Register = () => {
         const loggedUser = userCredential.user;
         evt.target.reset();
         setError('');
-        setSuccess('User has been created successfully');
+        // setSuccess('User has been created successfully');
+        sendVerification(loggedUser);
       })
       .catch((error) => {
         const errorMessage = error.message;
         setError(errorMessage);
       });
+
+    const sendVerification = (loggedUser) => {
+      sendEmailVerification(loggedUser).then((result) => {
+        setSuccess(`Verification has been sent. Please verify`);
+      });
+    };
   };
 
   return (
     <div className="">
-      <h2 className="fs-3 text-center">Please login</h2>
+      <h2 className="fs-3 text-center">Please Register</h2>
       <h4 className="text-center text-danger fs-4">{error}</h4>
       <h4 className="text-center text-success fs-4">{success}</h4>
       <form onSubmit={handleSubmit} className="w-50 mx-auto">
@@ -100,9 +112,14 @@ const Register = () => {
         </div>
 
         <button type="submit" className="btn btn-primary">
-          Submit
+          Register
         </button>
       </form>
+      <div className="d-flex justify-content-center">
+        <p>
+          Have an account? <Link to="/login">Log in</Link>
+        </p>
+      </div>
     </div>
   );
 };
