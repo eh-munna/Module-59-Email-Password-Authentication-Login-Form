@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
+  updateProfile,
 } from 'firebase/auth';
 import app from '../../firebase/firbase.config';
 import { Link } from 'react-router-dom';
@@ -51,6 +52,7 @@ const Register = () => {
     setSuccess(' ');
     setError(' ');
     const registerForm = evt.target;
+    const userGivenName = evt.target.name.value;
     const userEmail = evt.target.email.value;
     const userPassword = evt.target.password.value;
     const passValidation = /(?=.*[A-Z])/;
@@ -66,6 +68,7 @@ const Register = () => {
         setError('');
         // setSuccess('User has been created successfully');
         sendVerification(loggedUser);
+        userProfile(loggedUser, userGivenName);
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -77,6 +80,17 @@ const Register = () => {
         setSuccess(`Verification has been sent. Please verify`);
       });
     };
+    const userProfile = (loggedUser, userGivenName) => {
+      updateProfile(loggedUser, {
+        displayName: userGivenName,
+      })
+        .then((result) => {
+          setSuccess('Profile updated!');
+        })
+        .catch((error) => {
+          setError('An error occurred');
+        });
+    };
   };
 
   return (
@@ -85,6 +99,19 @@ const Register = () => {
       <h4 className="text-center text-danger fs-4">{error}</h4>
       <h4 className="text-center text-success fs-4">{success}</h4>
       <form onSubmit={handleSubmit} className="w-50 mx-auto">
+        <div className="mb-3">
+          <label htmlFor="exampleInputEmail1" className="form-label">
+            Your name
+          </label>
+          <input
+            required
+            name="name"
+            type="text"
+            className="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Email address

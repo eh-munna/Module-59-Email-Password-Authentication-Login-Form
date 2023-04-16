@@ -1,9 +1,10 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import app from '../../firebase/firbase.config';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +13,8 @@ const auth = getAuth(app);
 const Login = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [showPass, setShowPass] = useState(false);
+  const emailRef = useRef();
   const handleSubmit = (evt) => {
     evt.preventDefault();
     const registerForm = evt.target;
@@ -34,6 +37,28 @@ const Login = () => {
         setError(errorMessage);
       });
   };
+
+  const resetPassword = () => {
+    const email = emailRef.current.value;
+    console.log(email);
+
+    if (!email) {
+      alert('Please provide your email address to reset your password');
+      return;
+    }
+    sendPasswordResetEmail(auth, email)
+      .then((result) => {
+        setSuccess('Password reset email sent!');
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        setError(errorMessage);
+      });
+  };
+
+  const togglePassword = () => {
+    setShowPass(true);
+  };
   return (
     <div>
       <h2 className="fs-3 text-center">Please login</h2>
@@ -51,19 +76,33 @@ const Login = () => {
             className="form-control"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
+            ref={emailRef}
           />
         </div>
         <div className="mb-3">
           <label htmlFor="exampleInputPassword1" className="form-label">
             Password
           </label>
-          <input
-            required
-            name="password"
-            type="password"
-            className="form-control"
-            id="exampleInputPassword1"
-          />
+          {showPass ? (
+            <input
+              required
+              name="password"
+              type="text"
+              className="form-control"
+              id="exampleInputPassword1"
+            />
+          ) : (
+            <input
+              required
+              name="password"
+              type="password"
+              className="form-control"
+              id="exampleInputPassword1"
+            />
+          )}
+          <button onClick={togglePassword}>
+            {showPass ? `Hide Password ` : `Show Password `}
+          </button>
         </div>
 
         <button type="submit" className="btn btn-primary">
@@ -74,6 +113,14 @@ const Login = () => {
       <div className="d-flex justify-content-center">
         <p>
           Don't have an account? <Link to="/register">Create an account</Link>
+        </p>
+      </div>
+      <div className="d-flex justify-content-center">
+        <p>
+          Forget your password?
+          <button onClick={resetPassword} className="btn btn-link">
+            Reset Password
+          </button>
         </p>
       </div>
     </div>
