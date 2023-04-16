@@ -9,24 +9,55 @@ const auth = getAuth(app);
 const Register = () => {
   // const [email, setEmail] = useState(null);
   // const [password, setPassword] = useState(null);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setSuccess('');
-    setError('');
-    const userForm = event.target;
-    const userEmail = event.target.email.value;
-    const userPassword = event.target.password.value;
-    const passValidation = /^(?=.*[A-Z])$/;
+  // const [error, setError] = useState('');
+  // const [success, setSuccess] = useState('');
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const userForm = event.target;
+  //   const userEmail = event.target.email.value;
+  //   const userPassword = event.target.password.value;
+  //   const passValidation = /(?=.*[A-Z])/;
+  //   setSuccess('');
+  //   setError('');
+  //   if (!passValidation.test(userPassword)) {
+  //     setError('Password must have one uppercase letter');
+  //     return;
+  //   }
+  //   createUserWithEmailAndPassword(auth, userEmail, userPassword)
+  //     .then((userCredential) => {
+  //       const loggedUser = userCredential.user;
+  //       userForm.reset();
+  //       setError('');
+  //       setSuccess('User has been created successfully');
+  //     })
+  //     .catch((error) => {
+  //       const errorMessage = error.message;
+  //       setError(errorMessage);
+  //     });
+  // };
+
+  const [email, setEmail] = useState(null);
+  const [error, setError] = useState(null);
+  const [password, setPassword] = useState(' ');
+  const [success, setSuccess] = useState(' ');
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    setSuccess(' ');
+    setError(' ');
+    const registerForm = evt.target;
+    const userEmail = evt.target.email.value;
+    const userPassword = evt.target.password.value;
+    const passValidation = /(?=.*[A-Z])/;
+
     if (!passValidation.test(userPassword)) {
-      setError('Password must be one uppercase letter');
+      setError('Password must have one uppercase letter');
       return;
     }
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
       .then((userCredential) => {
         const loggedUser = userCredential.user;
-        userForm.reset();
+        evt.target.reset();
         setError('');
         setSuccess('User has been created successfully');
       })
@@ -35,6 +66,7 @@ const Register = () => {
         setError(errorMessage);
       });
   };
+
   return (
     <div className="">
       <h2 className="fs-3 text-center">Please login</h2>

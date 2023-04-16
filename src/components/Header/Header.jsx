@@ -10,8 +10,8 @@ const Header = () => {
             Logo
           </Link>
 
-          <div className="" id="navbarNav">
-            <ul className=" d-inline-flex list-unstyled gap-4 mb-0">
+          <div className="position-relative" id="navbarNav">
+            <ul className="d-block  d-md-flex list-unstyled gap-4 mb-0">
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/">
                   Home
